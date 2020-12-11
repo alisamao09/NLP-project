@@ -11,5 +11,6 @@ Arounded 500 students answered this pre-class question
 * Calculated word frequency by TFIDF
 * Explored multiple unsupervised clustering algorithms such as K-means, affinity clustering, and GMM etc.
 * Projected clusterings to 2D space and printed out N important terms for each cluster
+
 **Acknowledgement**
 I would like to thank my research project supervisor, Professor Carolyn Sealfon, for the amount of effort devoted, her patience, support, guidance, and also her valuable insight into my confusion. I'm also grateful for the opportunity to work on this fun project.
