@@ -1,4 +1,4 @@
-# research-project-1
+# NLP research project
 Classifying students' open-ended responses in large class
 ## Overview
 Open-ended questions can take a huge amount of time to read, especially in a large class of size of around 800 people
