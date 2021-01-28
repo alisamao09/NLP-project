@@ -22,21 +22,28 @@ import nltk
 import csv
 
 from google.colab import files
-csvfile=files.upload()
+#csvfile=files.upload()
 csvfile2=open('rev02lab.csv', 'rt', newline='')
-csvfile=files.upload()
+#csvfile=files.upload()
 csvfile3=open('rev03lab.csv', 'rt', newline='')
-csvfile=files.upload()
+#csvfile=files.upload()
 csvfile4=open('rev04lab.csv', 'rt', newline='')
-csvfile=files.upload()
+#csvfile=files.upload()
 csvfile5=open('rev05lab.csv', 'rt', newline='')
-csvfile=files.upload()
+#csvfile=files.upload()
 csvfile6=open('rev06lab.csv', 'rt', newline='')
-csvfile=files.upload()
+#csvfile=files.upload()
 csvfile7=open('rev07lab.csv', 'rt', newline='')
-csvfile=files.upload()
+#csvfile=files.upload()
 csvfile8=open('rev08lab.csv', 'rt', newline='')
-file = csv.reader(csvfile, delimiter=',')
+file2 = csv.reader(csvfile2, delimiter=',')
+file3 = csv.reader(csvfile3, delimiter=',')
+file4 = csv.reader(csvfile4, delimiter=',')
+file5 = csv.reader(csvfile5, delimiter=',')
+file6 = csv.reader(csvfile6, delimiter=',')
+file7 = csv.reader(csvfile7, delimiter=',')
+file8 = csv.reader(csvfile8, delimiter=',')
+
 
 # load data
 
@@ -49,87 +56,49 @@ from sklearn.model_selection import train_test_split
  
 ans1=[] #the student answers, each answer in a row
 target=[]
-for row in file:
+for row in file2:
     #print(row[0])
     ans1.append(str(row[0]))
     target.append(row[1])
-csvfile.close() 
-
-#add labeled data from other weeks
-
-csvfile=open('rev03lab.csv', 'rt', newline='') #labeled data from pre-class 3
-file3 = csv.reader(csvfile, delimiter=',')
-
-#print(len(ans1))
-
+csvfile2.close() 
 for row in file3:
     #print(row[0])
     ans1.append(str(row[0]))
     target.append(row[1])
-csvfile.close() 
-
-#print(len(ans1))
-
-csvfile=open('rev04lab.csv', 'rt', newline='') #labeled data from pre-class 4
-file4 = csv.reader(csvfile, delimiter=',')
-
+csvfile3.close() 
 for row in file4:
     #print(row[0])
     ans1.append(str(row[0]))
     target.append(row[1])
-csvfile.close()  
-
-#print(len(ans1))
-
-csvfile=open('rev05lab.csv', 'rt', newline='') #labeled data from pre-class 5
-file5 = csv.reader(csvfile, delimiter=',')
-
+csvfile4.close() 
 for row in file5:
     #print(row[0])
     ans1.append(str(row[0]))
     target.append(row[1])
-csvfile.close()      
-
-#print(len(ans1))
-
-
-csvfile=open('rev06lab.csv', 'rt', newline='') #labeled data from pre-class 6
-file6 = csv.reader(csvfile, delimiter=',')
-
+csvfile5.close() 
 for row in file6:
     #print(row[0])
     ans1.append(str(row[0]))
     target.append(row[1])
-csvfile.close()  
-
-#print(len(ans1))
-
-csvfile=open('rev07lab.csv', 'rt', newline='') #labeled data from pre-class 7
-file7 = csv.reader(csvfile, delimiter=',')
-
+csvfile6.close() 
 for row in file7:
     #print(row[0])
     ans1.append(str(row[0]))
     target.append(row[1])
-csvfile.close()  
-
-#print(len(ans1))
-csvfile=open('rev08lab.csv', 'rt', newline='') #labeled data from pre-class 8
-file8 = csv.reader(csvfile, delimiter=',')
-
+csvfile7.close() 
 for row in file8:
     #print(row[0])
     ans1.append(str(row[0]))
     target.append(row[1])
-csvfile.close()  
+csvfile8.close() 
 
 
-# build training, test dataset
+
 
 from sklearn.model_selection import train_test_split
 def train(classifier, X, y):
     X_train, X_test, y_train, y_test = train_test_split(X, y, 
-                        test_size=0.005, random_state=23)
+                        test_size=0.1)
  
     classifier.fit(X_train, y_train)
     print ("Accuracy: %s" % classifier.score(X_test, y_test))
@@ -141,30 +110,26 @@ from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
 trial1 = Pipeline([
     ('vectorizer', TfidfVectorizer()),
-    ('classifier', MultinomialNB(alpha=0.05)),
+    ('classifier', MultinomialNB(alpha=0.1)),
 ])
 
-# trial for the classifier    
+    
 trial3 = Pipeline([
     ('vectorizer', TfidfVectorizer(ngram_range=(1,2))),
     ('classifier', BernoulliNB()),
 ])
-
-# Naive Bayes classifier
 BernNB = Pipeline([
     ('vectorizer', TfidfVectorizer()),
     ('classifier', BernoulliNB(alpha=0.000001)),
 ])
 from sklearn.linear_model import SGDClassifier
 
-# New classifier I tried
 # sgd = Pipeline([('vect', CountVectorizer()),
 #                 ('tfidf', TfidfTransformer()),
 #                 ('clf', SGDClassifier(loss='hinge', penalty='l2',alpha=1e-3, random_state=42, max_iter=5, tol=None)),
 #                ])
 # sgd.fit(X)
 
-# text pre-processing
 from gensim.utils import simple_preprocess
 #and stem the words
 from nltk.stem.porter import PorterStemmer
@@ -179,20 +144,20 @@ for l in range(len(pro_sents)):
     sentsFilt.append(str(sent)) 
 train(BernNB, ans1, target) #training the classifier for answers vs. non-answers
 
-# #csvfile=files.upload()
-# csvfile=open('rev02.csv', 'rt', newline='') #Open file from class 2 with all responses
-# csvfile=files.upload()
-# csvfile=open('rev03.csv', 'rt', newline='') #Open file from class 3 with all responses
 #csvfile=files.upload()
-#csvfile=open('rev04.csv', 'rt', newline='') #Open file from class 4 with all responses
-# csvfile=files.upload()
-# csvfile=open('rev05.csv', 'rt', newline='') #Open file from class 5 with all responses
-# csvfile=files.upload()
-# csvfile=open('rev06.csv', 'rt', newline='') #Open file from class 6 with all responses
-# csvfile=files.upload()
-# csvfile=open('rev07.csv', 'rt', newline='') #Open file from class 7 with all responses
-csvfile=files.upload()
-csvfile=open('rev08.csv', 'rt', newline='') #Open file from class 8 with all responses
+csvfile=open('rev02.csv', 'rt', newline='') #Open file from class 2 with all responses
+#csvfile=files.upload()
+#csvfile=open('rev03.csv', 'rt', newline='') #Open file from class 2 with all responses
+#csvfile=files.upload()
+#csvfile=open('rev04.csv', 'rt', newline='') #Open file from class 2 with all responses
+#csvfile=files.upload()
+#csvfile=open('rev05.csv', 'rt', newline='') #Open file from class 2 with all responses
+#csvfile=files.upload()
+#csvfile=open('rev06.csv', 'rt', newline='') #Open file from class 2 with all responses
+#csvfile=files.upload()
+#csvfile=open('rev07.csv', 'rt', newline='') #Open file from class 2 with all responses
+#csvfile=files.upload()
+#csvfile=open('rev08.csv', 'rt', newline='') #Open file from class 2 with all responses
 file = csv.reader(csvfile, delimiter=',')
 resp=[] #the student answers, each answer in a row
 for row in file:
@@ -231,30 +196,20 @@ def process_text(text):
     tokens = [stemmer.stem(t) for t in tokens]
  
     return tokens
-#TFIDF
 #vectorizer = TfidfVectorizer(stop_words='english', ngram_range=(1,1), 
                              #min_df=4, max_df=0.8) #Nov 16: can play with ngram range, min_df, max_df
 vectorizer = TfidfVectorizer(stop_words='english', lowercase=True,
          tokenizer=process_text, strip_accents=None, ngram_range=(1,3), 
-        min_df=20, max_df=0.4) # Version with process text
+        min_df=20, max_df=0.6) # Version with process text
 X = vectorizer.fit_transform(ans) #turn responses into matrix
 #X = vectorizer.fit_transform(pro_sents) #why doesn't this work??
-# K-means clustering
-true_k = 10 #Nov. 16: Can change number of clusters
-kmodel = KMeans(n_clusters=true_k, init='k-means++', max_iter=50000)
-kmodel.fit(X)
-
-order_centroids = kmodel.cluster_centers_.argsort()[:, ::-1]
-terms = vectorizer.get_feature_names()
-labels = kmodel.labels_
-centroids = kmodel.cluster_centers_
+# true_k = 10 #Nov. 16: Can change number of clusters
+# kmodel = KMeans(n_clusters=true_k, init='k-means++', max_iter=50000)
+# kmodel.fit(X)
 
 
-from sklearn.metrics.pairwise import cosine_similarity
-dist = 1 - cosine_similarity(X)
-centdist = 1 -cosine_similarity(X,centroids)
 
-# affinity propagation clustering I tried
+# affinity propagation clustering
 # from numpy import unique
 # from numpy import where
 # from sklearn.datasets import make_classification
@@ -267,7 +222,7 @@ centdist = 1 -cosine_similarity(X,centroids)
 # # assign a cluster to each example
 # yhat = model.predict(X.toarray())
 
-# # agglomerative clustering I tried
+# # agglomerative clustering
 # # from numpy import unique
 # # from numpy import where
 # # from sklearn.datasets import make_classification
@@ -277,7 +232,7 @@ centdist = 1 -cosine_similarity(X,centroids)
 # # model = AgglomerativeClustering(n_clusters=2)
 # # # fit model and predict clusters
 
-# birch clustering I tried
+# birch clustering
 # from numpy import unique
 # from numpy import where
 # from sklearn.datasets import make_classification
@@ -288,16 +243,45 @@ centdist = 1 -cosine_similarity(X,centroids)
 # # fit the model
 # model.fit(X)
 
+import pandas as pd
+
+# training gaussian mixture model 
+from sklearn.mixture import BayesianGaussianMixture
+n_components=5
+gmm = BayesianGaussianMixture(n_components,max_iter=1000000, weight_concentration_prior=1)
+gmm.fit(X.toarray())
+
+#predictions from gmm
+labels = gmm.predict(X.toarray())
+order_centroids = gmm.means_.argsort()[:, ::-1]
+terms = vectorizer.get_feature_names()
+centroids = gmm.means_
+
+
+from sklearn.metrics.pairwise import cosine_similarity
+dist = 1 - cosine_similarity(X)
+centdist = 1 -cosine_similarity(X,centroids)
+# frame = pd.DataFrame(X)
+# frame['cluster'] = labels
+# # frame.columns = ['Weight', 'cluster']
+
+# color=['blue','green','cyan', 'black']
+# for k in range(0,4):
+#     data = frame[frame["cluster"]==k]
+#     plt.scatter(data[0],data[1],c=color[k])
+# plt.show()
+
+
+
 
 numex=10 # number of example statements to print
 
-# printing out results
 #csvfile= open('Output8.csv', 'wb')
 #file=csv.writer(csvfile, delimiter=',', dialect='excel')
 print()
 numstat=[]
-for i in range(true_k):   
-    d=kmodel.transform(X)[:,i] # This gives an array of len(X) distances. 
+for i in range(n_components):   
+    #d=gmm.transform(X)[:,i] # This gives an array of len(X) distances. 
     print("Cluster %d:" % i),
     numstat.append(sum(labels==i))
     print("# statements: %s" % numstat[i])
@@ -310,7 +294,7 @@ for i in range(true_k):
 #    file.writerows(bytes(thing, 'utf-8'))
 #    print("Statements:")
         #The indices of the 50 closest to centroid j are
-    ansind = numpy.argsort(d)[::][:]
+    #ansind = numpy.argsort(d)[::][:]
 #        print(n)
     j=0
 #    for n in range(len(ans)):#range(numpy.int(len(ans)/numstat)): #need to fix this    
@@ -345,7 +329,6 @@ import matplotlib as mpl
 
 from sklearn.manifold import TSNE
 
-# t-SNE
 tsne = TSNE(n_components=2, random_state=0, method='exact')
 pos = tsne.fit_transform(X) #why dist not X; what is dist again?
 
@@ -357,17 +340,17 @@ print()
 print()
 
 
-#set up colors per clusters using a dict; from brandonrose.org/clustering
+# set up colors per clusters using a dict; from brandonrose.org/clustering
 cluster_colors = {0: '#ff0000', 1: '#ff9900', 2: '#ffff00', 3: '#33cc33', 
                   4: '#3333ff', 5: '#6600cc', 6: '#ff00ff', 7: '#00ffff', 
                   8: '#800000', 9: '#003300', 10: '#003366', 11: '#660066', 
                   12: '#663300', 13: '#999966', 14: '#ccccff', 15: '#ff99cc',
                   16: '#ffffcc', 17: '#ccffcc', 18: '#ccffff', 19: '#66ccff'}
 
-#create data frame that has the result of the MDS plus the cluster numbers and titles
+# create data frame that has the result of the MDS plus the cluster numbers and titles
 #df = pd.DataFrame(dict(x=xs, y=ys, label=clusters)) 
 
-#group by cluster
+# group by cluster
 #groups = df.groupby('label')
 
 
@@ -377,7 +360,7 @@ ax.margins(0.05) # Optional, just adds 5% padding to the autoscaling
 from matplotlib import pyplot
 #pyplot.scatter(xs,ys)
 
-for i in range(true_k):
+for i in range(n_components):
     for n in range(len(ans)):
         if i==labels[n]:
             pyplot.scatter(xs[n],ys[n], marker='o', 
@@ -386,7 +369,7 @@ for i in range(true_k):
 
 pyplot.show()
 
-for i in range(true_k):
+for i in range(n_components):
     for n in range(len(ans)):
         if i==labels[n]:
             ax.plot(xs[n],ys[n], marker='o', linestyle='', ms=12, 
